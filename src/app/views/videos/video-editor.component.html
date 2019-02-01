@@ -1,0 +1,76 @@
+<div class="animated fadeIn">
+    <div class="email-app mb-4">
+
+        <main class="inbox">
+            <div class="toolbar">
+                <div class="btn-group">
+                    <div *ngIf="selectItem">
+                        <button *ngIf="role === 'Secretary' || role === 'Editor'"
+                                type="button" class="btn btn-square btn-dark">
+                            <i class="fa fa-refresh fa-lg"></i> Trả lại
+                        </button>
+                        <button *ngIf="role === 'Secretary' || role === 'Editor'" type="button" class="btn btn-square btn-info" (click)="changeItemToPublish()">
+                            <i class="fa fa-mail-forward"></i> Gửi xuất bản
+                        </button>
+                        <button *ngIf="role === 'Secretary'" type="button" class="btn btn-square btn-danger" (click)="eventPublishItem()">
+                            <i class="fa fa-upload fa-lg"></i> Xuất bản
+                        </button>
+                        <button *ngIf="role === 'Secretary' || role === 'Editor'" class="btn btn-square btn-danger" type="button" (click)="eventDeleteItem()">
+                            <span class="fa fa-trash-o"></span> Xóa video
+                        </button>
+                        <button *ngIf="role === 'Reporter'" class="btn btn-square btn-danger" type="button" >
+                            <span class="fa fa-reply fa-lg"></span> Rút lại
+                        </button>
+                    </div>
+                </div>
+                <div class="btn-group float-right">
+                    <button class="btn btn-light" type="button" (click)="prevPage()" [disabled]="videos && !videos.prev_page_url">
+                      <span class="fa fa-chevron-left"></span>
+                    </button>
+                    <button class="btn btn-light" type="button" (click)="nextPage()" [disabled]="videos && !videos.next_page_url">
+                      <span class="fa fa-chevron-right"></span>
+                    </button>
+                </div>
+            </div>
+            <ul class="messages" *ngIf="videos">
+                <li class="message unread" *ngFor="let video of videos.data" [ngClass]="{selected: isActive(video)}" (click)="selectVideo(video)">
+                    <div class="actions">
+                        <span class="action">
+                            <input type="checkbox" [checked]=" selected?.id === video.id">
+                        </span>
+                        <span class="action" id="CMSHighlightVideo">
+                            <button class="btn btn-ratting">
+                                <span [ngClass]="(video.highlight === 1) ? 'fa fa-star' : 'fa fa-star-o'"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <div class="CMSVideoItemAvatarWrapper">
+                        <img class="CMSVideoItem_Avatar" [src]="video.thumbnails ? environment.storage_url + video.thumbnails : ''" alt="{{ video.title }}">
+                    </div>
+                    <div class="CMSVideoItemInfoWrapper">
+                        <a (click)="eventViewDetailVideo(video.id)">
+                            {{ video ? video.title : '' }}
+                        </a>
+                        <div class="CMSVideoItemInfoDetail">
+                            <label>
+                                Ngày tạo
+                            </label>
+                            <span>{{ video.element.time_created | date : 'dd/MM/yyyy hh:mm:ss a' }}</span><br>
+                            <label>
+                                Ngày xuất bản
+                            </label>
+                            <span>{{ video.element.publish_at | date : 'dd/MM/yyyy hh:mm:ss a' }}</span><br>
+                            <label>
+                                Người tạo</label>
+                            <span>{{ video.element.user_created.name }}</span>
+                            <br>
+                            <label>
+                                Lượt xem</label>
+                            <span>0</span><br>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </main>
+    </div>
+</div>
